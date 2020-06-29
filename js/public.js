@@ -47,7 +47,7 @@ var requestPost = function   (url, params = {}) {
         reject(error)
       })
     })
-  }
+  };
   //post请求
 var requestPostForm = function  (url, params = {}) {
     return new Promise((resolve, reject) => {
