@@ -4,10 +4,36 @@
         return (arr[2]);
     else
         return null;
-}
+};
+var setCookie = function (c_name, value, expiredays) {
+    // alert("setCookie: "+"c_name="+c_name+";  value="+value);
+    // alert("document.domain="+document.domain);
+    let date=new Date();
+    let expireDays1=1; //将date设置为10天以后的时间
+    date.setTime(date.getTime()+expireDays1*24*3600*1000); //将userId和userName两个cookie设置为10天后过期
+    // document.cookie = c_name + "=" + escape(value) + "; domain=" + document.domain + "; path=/";
+
+    document.cookie = c_name + "=" + value + "; expires="+date.toUTCString()  + "; domain=" + document.domain + "; path=/";
+    // alert(c_name + "=" + value + "; expires="+date.toUTCString()  + "; domain=" + document.domain + "; path=/");
+    // alert("document.cookie="+document.cookie);
+};
+var setCookie1 = function (c_name, value, expiredays) {
+    // alert("setCookie: "+"c_name="+c_name+";  value="+value);
+    // alert("document.domain="+document.domain);
+    let date=new Date();
+    date.setTime(date.getTime()+expiredays*24*3600*1000); //将userId和userName两个cookie设置为10天后过期
+    // document.cookie = c_name + "=" + escape(value) + "; domain=" + document.domain + "; path=/";
+
+    document.cookie = c_name + "=" + value + "; expires="+date.toUTCString()  + "; domain=" + document.domain + "; path=/";
+    // alert(c_name + "=" + value + "; expires="+date.toUTCString()  + "; domain=" + document.domain + "; path=/");
+    // alert("document.cookie="+document.cookie);
+};
+var delCookie1 = function(c_name){
+    setCookie1(c_name,"",-1);
+};
 var getUserSession =function (key) {
     return sessionStorage.getItem(key);
-}
+};
 var setUserSession =function (key, value) {
     return sessionStorage.setItem(key, value);
 }

@@ -46,7 +46,7 @@
                     <!-- <a href="#">登录 </a> <span> | </span> <a href="#"> 注册</a>-->
                     <!-- 登录 -->
                     <!--<a href="#" class="personal"><span class="personalIco"></span>消息</a>-->
-                    <span v-if="logined == true">欢迎{{this.user.username}}</span>
+                    <span v-if="logined == true">欢迎&nbsp&nbsp<font size=5 color="#b22222">{{this.user.username}}</font></span>
                     <a href="javascript:;" @click="logout" v-if="logined == true">退出</a>
                     <a href="http://ucenter.xuecheng.com/" class="personal" target="_blank">我的学习</a>
                     <a href="javascript:;" @click="showlogin" v-if="logined == false">登陆&nbsp;|&nbsp;注册</a>
@@ -114,22 +114,22 @@
                 let activeUser= getActiveUser();
                 //取出cookie中的令牌
                 let uid = getCookie("uid");
-                if(!uid || uid==''){
-                    uid = this.uid;
-                }
-                console.log(activeUser);
+                // if(this.uid!=""){
+                //     uid = this.uid;
+                //     setCookie("uid",uid,-1);
+                //     alert("uid="+uid);
+                // }
+                // console.log(activeUser);
                 if(activeUser && uid && uid == activeUser.uid){
                     this.logined = true;
                     this.user = activeUser;
-                }else{
+                }else if(uid != null && uid != ""){
+/*                    uid = this.uid;
                     if(!uid || uid==''){
                         return ;
                     }
+                    setCookie("uid",uid,-1);*/
                     //请求查询jwt
-                    alert("uid="+uid);
-                    // const test = '{uid_cookie:' + uid + '}';
-                    // var ssoRequest = eval("("+test+")");
-                    // alert("ssoRequest.uid_cookie="+ssoRequest.uid_cookie);
                     getjwt(uid).then((res) => {
                         if(res.success){
                             let jwt = res.jwt;
@@ -137,6 +137,7 @@
                             if(activeUser){
                                 this.logined = true;
                                 this.user = activeUser;
+                                // alert(JSON.stringify(activeUser));
                                 setUserSession("activeUser",JSON.stringify(activeUser))
                             }
                         }
@@ -158,10 +159,26 @@
             // alert('hahahahahah')
             // this.refresh_user();
             let query = window.location.search;
-            if(query && query!=''){
-                this.uid = query.substring(5);
-                // alert(this.uid);
+            // alert("query="+query);
+            //login
+            if(query.indexOf("uid")>-1){
+                let uid = Base64.decode(query.substring(5));
+                setCookie1("uid",uid,0.5);
+                //清除url后缀
             }
+            //logout
+            if(query.indexOf("logout")>-1){
+                // alert("if(query.indexOf(\"logout\")>-1){");
+                delCookie1("uid");
+                this.logined = false;
+                delUserSession("activeUser");
+            }
+            //恢复URL  Location
+            let location = window.location.href;
+            let endIndex = location.indexOf("?");
+            if(endIndex>-1)
+                window.location.href = location.substring(0,endIndex);
+
             //刷新当前用户
             this.refresh_user();
         }
