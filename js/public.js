@@ -37,7 +37,7 @@ var requestQuickGet = function  (url) {
         reject(error)
       })
     })
-  }
+  };
   //post请求
 var requestPost = function   (url, params = {}) {
     return new Promise((resolve, reject) => {
